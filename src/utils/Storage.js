@@ -48,6 +48,25 @@ class Storage {
 
     return data;
   }
+
+  async delete(query) {
+    const data = await this.getAll();
+
+    const deletedData = [];
+    const filteredData = data.filter((item) => {
+      const isMatched = Object.keys(query).every(
+        (key) => item[key] === query[key]
+      );
+      if (isMatched) {
+        deletedData.push(item);
+      }
+      return !isMatched;
+    });
+
+    this.saveData(filteredData);
+
+    return filteredData;
+  }
 }
 
 export default Storage;

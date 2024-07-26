@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function CategoryView({ category, isOpen, onClose }) {
-  const [name, setName] = useState(category.name);
-  const [type, setType] = useState(category.type);
   const { categoryStorage, setCategoriesData } = useApp();
 
   const updateCategory = async (e) => {
@@ -26,7 +24,11 @@ export default function CategoryView({ category, isOpen, onClose }) {
     onClose();
   };
 
-  const deleteCategory = async () => {};
+  const deleteCategory = async () => {
+    const updatedCategories = await categoryStorage.delete({ id: category.id });
+    setCategoriesData(updatedCategories.reverse());
+    onClose();
+  };
 
   return (
     <Modal title="View Category" isOpen={isOpen} onClose={onClose}>
@@ -35,14 +37,14 @@ export default function CategoryView({ category, isOpen, onClose }) {
           <input
             type="text"
             name="name"
-            defaultValue={name}
+            defaultValue={category.name}
             placeholder="Enter category name"
             className="grow p-2 border border-gray-300 dark:border-gray-500 dark:bg-gray-700 dark:text-white rounded-md"
             required
           />
           <select
             name="type"
-            defaultValue={type}
+            defaultValue={category.type}
             className="flex-auto min-w-[98px] p-2 border border-gray-300 rounded-md dark:border-gray-500 dark:bg-gray-700 dark:text-white"
             required
           >
